@@ -75,6 +75,6 @@ def horse(mask):
 
 ---
 
-❤️ If these visualized HTML notes saved you before the Midterm, please give this repository a Star 🌟! It drives me to update the remaining parts!
+❤️ If these visualized HTML notes helped you, please give this repository a Star 🌟! It drives me to update the remaining parts!
 
-❤️ 如果这些网页可视化笔记理清了你的思绪，或者救你于 Midterm 之前，请帮我点一个 Star 🌟，这是对我持续更新最大的鼓励！
+❤️ 如果这些网页可视化笔记理清了你的思绪，请帮我点一个 Star 🌟，这是对我持续更新最大的鼓励！
