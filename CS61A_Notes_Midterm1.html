@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS61A — Mid-Term 1 Notes</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Serif+SC:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+  :root {
+    --bg:         #0d1117;
+    --bg2:        #161b22;
+    --bg3:        #1c2128;
+    --border:     #30363d;
+    --text:       #e6edf3;
+    --text-muted: #8b949e;
+    --accent:     #58a6ff;
+    --accent2:    #3fb950;
+    --accent3:    #d2a8ff;
+    --accent4:    #ffa657;
+    --warn:       #f85149;
+    --note-bg:    #132032;
+    --note-border:#1f6feb;
+    --tip-bg:     #0f2f1a;
+    --tip-border: #238636;
+    --warn-bg:    #2d1212;
+    --warn-border:#da3633;
+    --quiz-bg:    #1c1428;
+    --quiz-border:#8957e5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', 'Noto Serif SC', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    display: flex;
+  }
+
+  /* ── Sidebar TOC ── */
+  #toc {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  #toc h2 {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 20px 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  #toc a {
+    display: block;
+    padding: 5px 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color .15s, background .15s;
+    border-left: 2px solid transparent;
+  }
+  #toc a:hover { color: var(--accent); background: rgba(88,166,255,.06); border-left-color: var(--accent); }
+  #toc a.l1 { font-weight: 700; color: var(--text); font-size: 13.5px; margin-top: 8px; }
+  #toc a.l2 { padding-left: 32px; }
+  #toc a.l3 { padding-left: 44px; font-size: 12px; }
+
+  /* ── Main Content ── */
+  main {
+    flex: 1;
+    max-width: 860px;
+    padding: 48px 48px 80px;
+    min-width: 0;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 24px;
+    margin-bottom: 48px;
+  }
+  .page-header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 12px;
+  }
+  .page-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .page-header p { color: var(--text-muted); margin-top: 8px; font-size: 14px; }
+
+  /* ── Section headers ── */
+  h2.section {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 56px 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2.section .num {
+    background: var(--accent);
+    color: #000;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  h3.sub {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent3);
+    margin: 32px 0 10px;
+  }
+  h4.sub2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent4);
+    margin: 20px 0 8px;
+  }
+
+  /* ── Prose ── */
+  p { margin-bottom: 10px; }
+  strong { color: var(--text); font-weight: 700; }
+  em { color: var(--accent4); font-style: normal; font-weight: 600; }
+
+  /* ── Code blocks ── */
+  pre {
+    margin: 14px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+  pre code.hljs {
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  /* Inline code */
+  code:not(.hljs) {
+    background: var(--bg3);
+    color: var(--accent4);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── Callout boxes ── */
+  .note, .tip, .warn, .quiz, .trace {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 18px 0;
+    font-size: 14px;
+    border-left: 4px solid;
+  }
+  .note  { background: var(--note-bg);  border-color: var(--note-border); }
+  .tip   { background: var(--tip-bg);   border-color: var(--tip-border); }
+  .warn  { background: var(--warn-bg);  border-color: var(--warn-border); }
+  .quiz  { background: var(--quiz-bg);  border-color: var(--quiz-border); }
+  .trace { background: #1a1a0f; border-color: #b8a800; }
+
+  .note::before  { content: "📌 Note"; display: block; font-weight: 700; color: var(--accent); margin-bottom: 6px; font-size: 12px; letter-spacing:.06em; }
+  .tip::before   { content: "✅ Key Point"; display: block; font-weight: 700; color: var(--accent2); margin-bottom: 6px; font-size: 12px; letter-spacing:.06em; }
+  .warn::before  { content: "⚠️ Caution"; display: block; font-weight: 700; color: var(--warn); margin-bottom: 6px; font-size: 12px; letter-spacing:.06em; }
+  .quiz::before  { content: "🎯 Practice / 练习"; display: block; font-weight: 700; color: var(--accent3); margin-bottom: 6px; font-size: 12px; letter-spacing:.06em; }
+  .trace::before { content: "🔍 Trace / 逐步追踪"; display: block; font-weight: 700; color: #f0d000; margin-bottom: 6px; font-size: 12px; letter-spacing:.06em; }
+
+  .callout-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .tag-cn  { background:#1f3050; color: var(--accent); }
+  .tag-out { background:#0f2f1a; color: var(--accent2); }
+  .tag-err { background:#2d1212; color: var(--warn); }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13.5px; }
+  th { background: var(--bg3); color: var(--accent); text-align: left; padding: 8px 12px; border: 1px solid var(--border); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  td { padding: 8px 12px; border: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: rgba(255,255,255,.025); }
+
+  /* ── Divider ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* ── Output highlight ── */
+  .output {
+    background: #0a1a0a;
+    border: 1px solid #238636;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #3fb950;
+    margin: 8px 0 16px;
+  }
+  .output::before { content: "▶ Output"; display: block; font-size: 10px; color: #238636; margin-bottom: 4px; letter-spacing: .08em; font-weight: 700; }
+
+  /* ── Chinese annotation ── */
+  .cn { color: #a5c8ff; font-style: italic; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR TOC ══════════ -->
+<nav id="toc">
+  <h2>Contents</h2>
+  <a class="l1" href="#lec2">Lecture 2: Functions</a>
+  <a class="l2" href="#basic-fn">Basic Function Syntax</a>
+  <a class="l2" href="#env-concept">Environments (概念)</a>
+  <a class="l2" href="#name-rebind">Name Rebinding Q1</a>
+  <a class="l2" href="#none">None Values</a>
+
+  <a class="l1" href="#lec3">Lecture 3: Control</a>
+  <a class="l2" href="#divmod">truediv / floordiv / mod</a>
+  <a class="l2" href="#ifstmt">Absolute Value & if/elif</a>
+  <a class="l2" href="#iteration">While Loops</a>
+  <a class="l2" href="#fib">Fibonacci</a>
+  <a class="l2" href="#if-func">Control & if_ Function</a>
+  <a class="l2" href="#logical">Logical Operators</a>
+
+  <a class="l1" href="#hof">Higher-Order Functions</a>
+  <a class="l2" href="#area">Generalization: Area</a>
+  <a class="l2" href="#summation">summation()</a>
+  <a class="l2" href="#make-adder">make_adder & Closure</a>
+  <a class="l2" href="#env-diagram">Environment Diagrams 完整指南</a>
+  <a class="l2" href="#compose">Function Composition</a>
+  <a class="l2" href="#lambda">Lambda Expressions</a>
+  <a class="l2" href="#currying">Currying 柯里化</a>
+
+  <a class="l1" href="#abstractions">Functional Abstractions</a>
+  <a class="l2" href="#return-stmt">Return Statements</a>
+  <a class="l2" href="#search">search & inverse</a>
+  <a class="l2" href="#naming">Naming Tips</a>
+  <a class="l2" href="#errors">Errors & Tracebacks</a>
+
+  <a class="l1" href="#midterm">Mid-Term 1 Review</a>
+  <a class="l2" href="#q-print">What Does Python Print?</a>
+  <a class="l2" href="#q-delay">delay / pirate / horse</a>
+  <a class="l2" href="#q-remove">remove()</a>
+  <a class="l2" href="#decorators">Decorators</a>
+</nav>
+
+<!-- ══════════ MAIN ══════════ -->
+<main>
+
+<header class="page-header">
+  <div class="badge">UCB CS61A</div>
+  <h1>Mid-Term 1 — Study Notes</h1>
+  <p>2024 Fall Lecture 2-8 </p>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     LECTURE 2: FUNCTIONS
+════════════════════════════════════════════════ -->
+<h2 class="section" id="lec2"><span class="num">L2</span> Functions</h2>
+
+<!-- ── Basic Functions ── -->
+<h3 class="sub" id="basic-fn">Basic Function Syntax</h3>
+
+<pre><code class="language-python">def square_(x):       # 定义函数 (define a function)
+    return x * x      # 函数体 (function body)
+
+print(square_(5))     # 调用函数 (call the function)  → 25
+
+def sum_squares(x, y):
+    return square_(x) + square_(y)
+
+print(sum_squares(3, 4))   # → 25
+</code></pre>
+
+<div class="tip">
+  Functions are defined with <code>def</code>.<br>
+  A <code>return</code> statement specifies the output value.<br>
+  Functions can call other functions — inner evaluation creates nested frames.
+</div>
+
+<pre><code class="language-python">from operator import mul
+
+def square(square):        # 参数名可以与函数同名，但不推荐
+    return mul(square, square)
+
+print(square(-2))   # → 4
+</code></pre>
+
+<!-- ── Environments ── -->
+<h3 class="sub" id="env-concept">Environments — 核心概念</h3>
+
+<div class="note">
+  <strong>Environment（环境）</strong> = 一个 <em>帧（frame）</em> 序列。每个帧是 <strong>变量名 → 值</strong> 的映射。<br><br>
+  • 函数被调用 → 创建新帧，参数绑定为实参值。<br>
+  • 函数返回 → 该帧从环境中移除。<br>
+  • <strong>名字查找规则</strong>：在当前环境中，从最近的帧开始向外查找，返回第一个匹配的绑定。
+  <span class="cn">（A name evaluates to the value bound in the earliest frame where that name is found.）</span>
+</div>
+
+<!-- ── Name Rebinding ── -->
+<h3 class="sub" id="name-rebind">Name Rebinding — Question 1</h3>
+
+<pre><code class="language-python">f = min        # 1️⃣  f 绑定到 min 函数
+f = max        # 2️⃣  f 改为绑定到 max 函数
+g, h = min, max  # g → min，h → max
+max = g        # 3️⃣  名字 max 现在绑定到 min 函数！
+
+print(max(f(2, g(h(1, 5), 3)), 4))
+</code></pre>
+
+<div class="trace">
+  逐步求值：<br>
+  <code>h(1, 5)</code> → <em>max(1,5)</em> = <strong>5</strong><br>
+  <code>g(5, 3)</code> → <em>min(5,3)</em> = <strong>3</strong><br>
+  <code>f(2, 3)</code> → <em>max(2,3)</em> = <strong>3</strong>（此时 f 仍是原始 max）<br>
+  <code>max(3, 4)</code> → <em>min(3,4)</em> = <strong>3</strong>（max 已被重绑为 min！）<br>
+  <strong>Output: 3</strong>
+</div>
+
+<div class="output">3</div>
+
+<!-- ── None ── -->
+<h3 class="sub" id="none">None Values</h3>
+
+<pre><code class="language-python">print(print(1), print(2))
+</code></pre>
+
+<div class="trace">
+  求值顺序：<br>
+  1. <code>print(1)</code> → 输出 <code>1</code>，返回 <code>None</code><br>
+  2. <code>print(2)</code> → 输出 <code>2</code>，返回 <code>None</code><br>
+  3. 外层 <code>print(None, None)</code> → 输出 <code>None None</code>
+</div>
+<div class="output">1<br>2<br>None None</div>
+
+<div class="warn">
+  <code>None</code> 在交互式解释器中不会被自动显示（只有非 None 的表达式值才会显示），<br>但 <code>print()</code> 会显式打印它。<br>
+  没有 <code>return</code> 语句（或 <code>return</code> 不带值）的函数默认返回 <code>None</code>。
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════
+     LECTURE 3: CONTROL
+════════════════════════════════════════════════ -->
+<h2 class="section" id="lec3"><span class="num">L3</span> Control</h2>
+
+<!-- ── div / mod ── -->
+<h3 class="sub" id="divmod">truediv · floordiv · mod</h3>
+
+<pre><code class="language-python">from operator import truediv, floordiv, mod
+
+print(truediv(2013, 10))    # 等价 2013 / 10  → 201.3
+print(floordiv(2013, 10))   # 等价 2013 // 10 → 201
+print(mod(2013, 10))        # 等价 2013 % 10  → 3
+
+def divide_exact(n, d):
+    return n // d, n % d    # 返回 (商, 余数) 的元组
+
+quotient, remainder = divide_exact(2013, 10)
+print('Quotient:', quotient)    # → 201
+print('Remainder:', remainder)  # → 3
+</code></pre>
+
+<!-- ── if/elif ── -->
+<h3 class="sub" id="ifstmt">Absolute Value — if / elif / else</h3>
+
+<pre><code class="language-python">def absolute_value(x):
+    """Return the absolute value of x."""
+    if x < 0:
+        return -x
+    elif x == 0:
+        return 0
+    else:
+        return x
+</code></pre>
+
+<div class="note">
+  <code>if</code> 可以有多个 <code>elif</code> 分支，但 <code>else</code> 只能有一个，且必须在最后。
+</div>
+
+<!-- ── While ── -->
+<h3 class="sub" id="iteration">While Loops — 迭代</h3>
+
+<pre><code class="language-python">i, total = 0, 0
+while i < 3:
+    i = i + 1
+    total = total + i
+print(total)   # → 6
+</code></pre>
+
+<div class="tip">
+  <strong>While 执行规则：</strong><br>
+  1. 评估条件表达式。<br>
+  2. 若为真（truthy）→ 执行整个 suite，再回到步骤 1。<br>
+  3. 若为假（falsy）→ 跳过，继续后续代码。
+</div>
+
+<!-- ── Fibonacci ── -->
+<h3 class="sub" id="fib">Fibonacci Sequence</h3>
+
+<pre><code class="language-python"># 版本 1：从 (0, 1) 开始，k 从 1 计数
+def fib(n):
+    """Compute the nth Fibonacci number, for n >= 1."""
+    pred, curr = 0, 1   # 第 0 项, 第 1 项
+    k = 1               # curr 是第 k 项
+    while k < n:
+        pred, curr = curr, pred + curr
+        k = k + 1
+    return curr
+
+print(fib(10))   # → 55
+
+# 版本 2：从 (1, 0) 开始，k 从 0 计数
+def fib_(n):
+    """Compute the nth Fibonacci number, for n >= 1."""
+    pred, curr = 1, 0   # 第 1 项, 第 0 项
+    k = 0               # curr 是第 k 项
+    while k < n:
+        pred, curr = curr, pred + curr
+        k = k + 1
+    return curr
+
+print(fib_(10))  # → 55
+</code></pre>
+
+<div class="note">
+  版本1「少算一步」但「起点更靠前」；版本2「起点靠后」但「多算一步」，两者恰好抵消，都在 <code>curr</code> 到达 55 时停下。
+</div>
+
+<!-- ── if_ function ── -->
+<h3 class="sub" id="if-func">Control — <code>if_</code> 函数的陷阱</h3>
+
+<pre><code class="language-python">from math import sqrt
+
+# ✅ 正确做法：用 if 语句
+def real_sqrt(x):
+    if x >= 0:
+        return sqrt(x)
+    else:
+        return 0
+
+print(real_sqrt(-1))   # → 0
+print(real_sqrt(4))    # → 2.0
+
+# ❌ 有问题的做法：用函数实现条件
+def if_(condition, true_result, false_result):
+    if condition:
+        return true_result
+    else:
+        return false_result
+
+def real_sqrt_bad(x):
+    return if_(x >= 0, sqrt(x), 0)   # ← sqrt(-1) 会在传参时被求值！
+
+try:
+    real_sqrt_bad(-1)   # 触发 ValueError: math domain error
+except Exception as e:
+    print('Error:', e)
+</code></pre>
+
+<div class="warn">
+  调用表达式在调用前会<strong>先求值所有参数</strong>，无法跳过。<br>
+  因此把条件分支封装成函数时，无论条件真假，两个分支都会被计算。<br>
+  <strong>→ 需要短路求值时，只能用 <code>if/else</code> 语句，不能用函数。</strong>
+</div>
+
+<!-- ── Logical operators ── -->
+<h3 class="sub" id="logical">Logical Operators — 逻辑运算符</h3>
+
+<table>
+  <tr><th>表达式</th><th>求值规则</th><th>短路？</th></tr>
+  <tr><td><code>A and B</code></td><td>A 为假 → 返回 A；否则返回 B</td><td>✅ A 为假时跳过 B</td></tr>
+  <tr><td><code>A or B</code></td><td>A 为真 → 返回 A；否则返回 B</td><td>✅ A 为真时跳过 B</td></tr>
+  <tr><td><code>not A</code></td><td>A 为真 → False；A 为假 → True</td><td>—</td></tr>
+</table>
+
+<pre><code class="language-python">def has_big_sqrt(x):
+    """Return whether x has a real square root > 10."""
+    return x > 0 and sqrt(x) > 10
+    # 若 x <= 0，短路，不会调用 sqrt(x)
+
+print(has_big_sqrt(1))       # → False
+print(has_big_sqrt(1000))    # → True
+print(has_big_sqrt(-1000))   # → False （短路，不求 sqrt）
+
+def reasonable(n):
+    """Return whether n is a reasonable number."""
+    return n == 0 or 1 / n != 0
+    # 若 n == 0，短路，避免除零错误
+
+print(reasonable(0))     # → True （短路）
+print(reasonable(100))   # → True
+</code></pre>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════
+     HIGHER-ORDER FUNCTIONS
+════════════════════════════════════════════════ -->
+<h2 class="section" id="hof"><span class="num">HOF</span> Higher-Order Functions 高阶函数</h2>
+
+<!-- ── Area ── -->
+<h3 class="sub" id="area">Generalization — 泛化：Area Functions</h3>
+
+<pre><code class="language-python">from math import pi, sqrt
+
+# ── 重复的实现 ──
+def area_square(r):  return r * r
+def area_circle(r):  return pi * r * r
+def area_hexagon(r): return 3 * sqrt(3) / 2 * r * r
+
+# ── 泛化：提取公共结构 ──
+def area(r, shape_constant):
+    assert r > 0, 'A length must be positive!'   # 断言语句
+    return shape_constant * r * r
+
+def area_square(r):   return area(r, 1)
+def area_circle(r):   return area(r, pi)
+def area_hexagon(r):  return area(r, 3 * sqrt(3) / 2)
+</code></pre>
+
+<div class="tip">
+  <code>assert &lt;expr&gt;, &lt;message&gt;</code>：若 expr 为假则抛出 <code>AssertionError</code>，显示 message。<br>
+  泛化的核心：把变化的部分（<code>shape_constant</code>）参数化，把不变的结构提取成函数。
+</div>
+
+<!-- ── summation ── -->
+<h3 class="sub" id="summation">summation() — 函数作为参数</h3>
+
+<pre><code class="language-python">def identity(k):  return k
+def cube(k):      return pow(k, 3)
+
+def summation(n, term):
+    """Return term(1) + term(2) + ... + term(n)."""
+    total, k = 0, 1
+    while k <= n:
+        total, k = total + term(k), k + 1
+    return total
+
+print(summation(5, identity))  # 1+2+3+4+5  → 15
+print(summation(5, cube))      # 1+8+27+64+125 → 225
+</code></pre>
+
+<div class="note">
+  <code>term</code> 是一个<strong>函数参数</strong>——这使得 <code>summation</code> 成为<strong>高阶函数</strong>。<br>
+  通过传入不同的 <code>term</code>，同一个 <code>summation</code> 可以计算任意序列的和，不需要重写循环逻辑。
+</div>
+
+<!-- ── make_adder ── -->
+<h3 class="sub" id="make-adder">make_adder — 函数作为返回值 & 闭包</h3>
+
+<pre><code class="language-python">def make_adder(n):
+    """Return a function that takes K and returns N + K."""
+    def adder(k):
+        return n + k       # 内层函数访问外层函数的参数 n
+    return adder           # 返回函数对象本身
+
+add_three = make_adder(3)
+print(add_three(4))          # → 7
+print(make_adder(5)(10))     # → 15
+</code></pre>
+
+<div class="note">
+  <strong>Closure（闭包）</strong>：<code>adder</code> 记住了定义时所在环境中 <code>n</code> 的值。<br>
+  即使 <code>make_adder</code> 的调用帧已被移除，<code>n</code> 仍通过闭包保持可访问。
+</div>
+
+<pre><code class="language-python">def apply_twice(f, x):
+    """Return f(f(x))."""
+    return f(f(x))
+
+def square(x): return x * x
+
+print(apply_twice(square, 3))   # square(square(3)) = square(9) = 81
+</code></pre>
+
+<!-- ── Environment Diagrams ── -->
+<h3 class="sub" id="env-diagram">Environment Diagrams — 完整指南</h3>
+
+<div class="note">
+<strong>一、核心概念速查</strong><br><br>
+<strong>环境（Environment）</strong>：一系列帧，通过父链接连接，形成作用域链。全局帧位于最底层。<br>
+<strong>帧（Frame）</strong>：变量名 → 值 的映射字典。<br>
+<strong>绑定（Binding）</strong>：帧中的 <code>x → 3</code> 记录。<br>
+<strong>函数对象（Closure）</strong>：= 代码（参数+函数体）+ 定义时的词法环境指针。
+</div>
+
+<h4 class="sub2">二、绘制步骤（逐步法）</h4>
+
+<table>
+  <tr><th>步骤</th><th>操作</th></tr>
+  <tr><td>1</td><td>画全局帧，写入所有顶层绑定（函数名、变量）。</td></tr>
+  <tr><td>2</td><td>遇到函数调用：先求值所有参数表达式。</td></tr>
+  <tr><td>3</td><td>为被调用函数创建新帧，写入参数名 = 实参值。</td></tr>
+  <tr><td>4</td><td>新帧的<strong>父链接</strong>指向函数<strong>定义时</strong>的环境（非调用时！）。</td></tr>
+  <tr><td>5</td><td>在新帧中执行函数体。</td></tr>
+  <tr><td>6</td><td>函数返回 → 移除调用帧，返回值传给调用者。</td></tr>
+</table>
+
+<h4 class="sub2">示例 1：make_adder 闭包</h4>
+
+<pre><code class="language-python">def make_adder(n):
+    def adder(k):
+        return n + k
+    return adder
+
+add_three = make_adder(3)   # add_three 是闭包，捕获 n=3
+result    = add_three(4)    # → 7
+</code></pre>
+
+<div class="trace">
+  <strong>1</strong> Global 帧：<code>make_adder → &lt;func&gt;</code>，<code>add_three → ?</code><br>
+  <strong>2</strong> 调用 <code>make_adder(3)</code>：新帧 <code>n=3</code>，父→Global<br>
+  <strong>3</strong> 定义 <code>adder</code>：函数对象带箭头→ 当前帧（含 <code>n=3</code>）<br>
+  <strong>4</strong> <code>make_adder</code> 返回闭包 → Global 中 <code>add_three = &lt;closure adder, env{n=3}&gt;</code><br>
+  <strong>5</strong> 调用 <code>add_three(4)</code>：新帧 <code>k=4</code>，父→闭包环境（含 <code>n=3</code>）<br>
+  <strong>6</strong> 计算 <code>n+k = 3+4 = 7</code>，返回 7。<br>
+  <strong>Output: 7</strong>
+</div>
+
+<h4 class="sub2">示例 2：apply_twice 调用序列</h4>
+
+<div class="trace">
+  <code>apply_twice(square, 2)</code><br>
+  → 新帧：<code>f=square, x=2</code>，父→Global<br>
+  → 内层 <code>f(x)</code> = <code>square(2)</code> → 新帧 <code>x=2</code> → 返回 4<br>
+  → 外层 <code>f(4)</code> = <code>square(4)</code> → 新帧 <code>x=4</code> → 返回 16<br>
+  → <code>apply_twice</code> 返回 16<br>
+  <strong>Output: 16</strong>
+</div>
+
+<div class="warn">
+  <strong>易错点：</strong><br>
+  1. 忘记先求值参数再创建帧。<br>
+  2. 把函数的「定义环境」误认为「调用环境」——闭包捕获的是<strong>定义时</strong>的词法环境。<br>
+  3. 忘记函数返回后移除调用帧（但被闭包引用的帧会长期存在）。
+</div>
+
+<!-- ── Function Composition ── -->
+<h3 class="sub" id="compose">Function Composition — 函数组合</h3>
+
+<pre><code class="language-python">def square(x):  return x * x
+def triple(x):  return 3 * x
+
+def compose1(f, g):
+    """Return h such that h(x) = f(g(x))."""
+    def h(x):
+        return f(g(x))
+    return h
+
+squiple = compose1(square, triple)   # squiple(x) = (3x)² = 9x²
+tripare = compose1(triple, square)   # tripare(x) = 3(x²) = 3x²
+
+print(squiple(5))   # 9 * 25 = 225
+print(tripare(5))   # 3 * 25 = 75
+
+squadder = compose1(square, make_adder(2))   # squadder(x) = (x+2)²
+print(squadder(3))   # (3+2)² = 25
+</code></pre>
+
+<!-- ── Lambda ── -->
+<h3 class="sub" id="lambda">Lambda Expressions — 匿名函数</h3>
+
+<pre><code class="language-python">square = lambda x: x * x       # 等价于 def square(x): return x * x
+
+print(square(5))                # → 25
+print((lambda x: x * x)(3))    # → 9  （直接调用）
+</code></pre>
+
+<div class="tip">
+  Lambda 是单表达式的匿名函数，语法：<code>lambda &lt;params&gt;: &lt;expression&gt;</code>。<br>
+  不能包含语句（如 <code>if</code>、<code>while</code>、<code>return</code>）。<br>
+  Lambda 的父帧是定义时的当前帧（同样形成闭包）。
+</div>
+
+<h4 class="sub2">Lambda 闭包示例</h4>
+<pre><code class="language-python">a = 1
+def f(x):
+    a = 2
+    return lambda y: a * g(y)   # 捕获局部 a=2，不是全局 a=1
+
+# g 作为参数传入
+f(lambda y: a + y)(a)
+# g = lambda y: a + y，这里 a=1（全局），所以 g(y) = 1 + y
+# lambda y: a * g(y) 中 a=2（f 内局部），g(1) = 1+1=2
+# 结果：2 * 2 = 4
+</code></pre>
+
+<!-- ── Currying ── -->
+<h3 class="sub" id="currying">Currying — 柯里化</h3>
+
+<pre><code class="language-python">def curry2(f):
+    """Convert a two-argument function to curried form."""
+    def g(x):
+        def h(y):
+            return f(x, y)
+        return h
+    return g
+
+from operator import add
+curried_add = curry2(add)
+add_three   = curried_add(3)   # 固定第一个参数为 3
+print(add_three(2))            # → 5
+
+# 用 lambda 简化 curry2：
+curry2 = lambda f: lambda x: lambda y: f(x, y)
+
+print(curry2(add)(3)(2))       # → 5
+</code></pre>
+
+<div class="note">
+  <strong>柯里化</strong>：将多参数函数转换为一系列单参数函数的过程。<br>
+  <code>f(x, y)</code> → <code>g(x)(y)</code>，允许逐步传入参数，形成更灵活的函数组合。
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════
+     FUNCTIONAL ABSTRACTIONS
+════════════════════════════════════════════════ -->
+<h2 class="section" id="abstractions"><span class="num">FA</span> Functional Abstractions</h2>
+
+<!-- ── Return Statements ── -->
+<h3 class="sub" id="return-stmt">Return Statements — 返回语句</h3>
+
+<pre><code class="language-python">def end(n, d):
+    """打印 n 末位数字，直到遇到 d 为止。"""
+    while n > 0:
+        last, n = n % 10, n // 10
+        print(last)
+        if last == d:
+            return None   # 遇到 d 立即返回
+
+end(12345, 3)
+# 输出：5  4  3
+</code></pre>
+
+<div class="note">
+  Return 语句用于完成对调用表达式的求值。一旦执行 <code>return</code>，函数立即结束，剩余代码不再执行。
+</div>
+
+<!-- ── search / inverse ── -->
+<h3 class="sub" id="search">search() & inverse() — 高阶函数综合示例</h3>
+
+<pre><code class="language-python">def search(f):
+    """Find the smallest non-negative integer x where f(x) is truthy."""
+    x = 0
+    while True:
+        if f(x):
+            return x
+        x += 1
+
+def square(x): return x * x
+
+def positive(x):
+    return max(0, square(x) - 100)   # x > 10 时为正
+
+print(search(positive))   # → 11（11² - 100 = 21 > 0，为真）
+
+def inverse(f):
+    """Return g such that g(f(x)) returns x (integer approximation)."""
+    return lambda y: search(lambda x: f(x) == y)
+
+sqrt = inverse(square)
+print(sqrt(256))    # → 16
+</code></pre>
+
+<div class="trace">
+  <code>sqrt(256)</code><br>
+  → <code>search(lambda x: square(x) == 256)</code><br>
+  → 逐个测试 x=0,1,2,...,16<br>
+  → <code>square(16) = 256 == 256</code> → True → 返回 16
+</div>
+
+<!-- ── Naming Tips ── -->
+<h3 class="sub" id="naming">Choosing Names — 命名原则</h3>
+
+<table>
+  <tr><th>原则</th><th>说明</th><th>示例</th></tr>
+  <tr><td>传达意义</td><td>名字应反映其绑定值的含义或用途</td><td><code>hypotenuse</code> 而非 <code>h</code></td></tr>
+  <tr><td>函数名传达行为</td><td>效果 / 行为 / 返回值</td><td><code>print</code> / <code>triple</code> / <code>abs</code></td></tr>
+  <tr><td>类型写在 docstring</td><td>不要把类型塞进变量名</td><td><code>n</code> 配 docstring，而非 <code>n_int</code></td></tr>
+  <tr><td>重复表达式命名</td><td>避免重复计算</td><td><code>hyp = sqrt(x²+y²)</code>，然后复用</td></tr>
+  <tr><td>有意义的中间量命名</td><td>拆解复杂表达式</td><td><code>discriminant = b²-4ac</code></td></tr>
+</table>
+
+<pre><code class="language-python"># 命名有意义的中间量示例
+discriminant = square(b) - 4 * a * c
+x = (-b + sqrt(discriminant)) / (2 * a)   # 比直接嵌套更清晰
+
+# 常见约定
+# n, k, i  → 整数
+# s, t     → 字符串
+# x, y, z  → 数值
+# f, g, h  → 函数
+</code></pre>
+
+<!-- ── Errors ── -->
+<h3 class="sub" id="errors">Errors & Tracebacks — 错误与追踪</h3>
+
+<pre><code class="language-python"># 无限递归：f 和 g 互相调用，没有终止条件
+def f(x): return g(x - 1)
+def g(y): return f(y + 1)
+
+try:
+    f(3)
+except RecursionError as e:
+    print('RecursionError:', e)
+</code></pre>
+
+<div class="tip">
+  <strong>读 Traceback 的方法：</strong><br>
+  Python 显示 "most recent call last"，<strong>从下往上读</strong>。<br>
+  最底部 = 最近的调用位置（错误发生处）；往上 = 调用链的早期调用。<br><br>
+  常见错误类型：<br>
+  • <code>RecursionError</code>：无限递归，超过最大递归深度。<br>
+  • <code>NameError</code>：引用了未定义的名字。<br>
+  • <code>TypeError</code>：参数数量或类型不对。
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════
+     MID-TERM 1 REVIEW
+════════════════════════════════════════════════ -->
+<h2 class="section" id="midterm"><span class="num">MT1</span> Mid-Term 1 Review</h2>
+
+<!-- ── What would Python print? ── -->
+<h3 class="sub" id="q-print">What Would Python Print?</h3>
+
+<h4 class="sub2">基础 print</h4>
+<pre><code class="language-python">from operator import mul
+def square(x): return mul(x, x)
+
+print(5)           # → 5
+print(print(5))    # → 先输出 5，再输出 None
+</code></pre>
+<div class="output">5<br>5<br>None</div>
+
+<!-- ── delay / pirate / horse ── -->
+<h3 class="sub" id="q-delay">delay · pirate · horse — 经典追踪题</h3>
+
+<h4 class="sub2">delay()</h4>
+<pre><code class="language-python">def delay(arg):
+    print('delayed')
+    def g():
+        return arg
+    return g
+
+delay(delay)()(6)()
+</code></pre>
+
+<div class="trace">
+  <strong>拆解：</strong><br>
+  <code>delay(delay)</code> → 打印 <code>delayed</code>①，返回 g₁（内含 arg=delay）<br>
+  <code>delay(delay)()</code> = g₁() → 返回 delay 函数本身（不打印）<br>
+  <code>delay(delay)()(6)</code> = delay(6) → 打印 <code>delayed</code>②，返回 g₂（内含 arg=6）<br>
+  <code>delay(delay)()(6)()</code> = g₂() → 返回 6（不打印）<br>
+  <strong>共打印两次 "delayed"，整个表达式的值是 6。</strong>
+</div>
+<div class="output">delayed<br>delayed</div>
+
+<pre><code class="language-python">print(delay(print)()(4))
+</code></pre>
+
+<div class="trace">
+  <code>delay(print)</code> → 打印 <code>delayed</code>，返回 g（arg=print）<br>
+  <code>delay(print)()</code> = g() → 返回 print 函数本身<br>
+  <code>delay(print)()(4)</code> = print(4) → 打印 <code>4</code>，返回 None<br>
+  外层 <code>print(None)</code> → 打印 <code>None</code>
+</div>
+<div class="output">delayed<br>4<br>None</div>
+
+<h4 class="sub2">pirate()</h4>
+<pre><code class="language-python">def pirate(arggg):
+    print('matey')
+    def plunder(arggg):
+        return arggg
+    return plunder
+
+from operator import add
+add(pirate(3)(square)(4), 1)
+</code></pre>
+
+<div class="trace">
+  <code>pirate(3)</code> → 打印 <code>matey</code>，返回 plunder（参数名也叫 arggg，但与外层无关）<br>
+  <code>pirate(3)(square)</code> = plunder(square) → 返回 square（plunder 原样返回参数）<br>
+  <code>pirate(3)(square)(4)</code> = square(4) → 返回 16<br>
+  <code>add(16, 1)</code> → 返回 17
+</div>
+<div class="output">matey<br>（add 返回 17，但没有 print，不显示）</div>
+
+<h4 class="sub2">horse() — 最难的命名混淆题</h4>
+<pre><code class="language-python">def horse(mask):
+    horse = mask              # ① 局部 horse = 传入的 lambda
+    def mask(horse):          # ② 局部 mask（覆盖了参数！）
+        return horse
+    return horse(mask)        # ③ 用局部 horse 调用局部 mask
+
+mask = lambda horse: horse(2)
+print(horse(mask))
+</code></pre>
+
+<div class="trace">
+  <strong>标注每个变量：</strong><br>
+  <code>horse_loc</code> = 外部 <code>mask</code> = <code>lambda horse: horse(2)</code><br>
+  <code>mask_loc</code> = 新定义的函数（原样返回参数）<br>
+  返回：<code>horse_loc(mask_loc)</code><br>
+  = <code>(lambda horse: horse(2))(mask_loc)</code><br>
+  = <code>mask_loc(2)</code><br>
+  = <code>2</code><br><br>
+  <strong>关键陷阱</strong>：<code>horse = mask</code>（第①行）在 <code>def mask(horse)</code>（第②行）<em>之前</em>执行，<br>
+  所以 <code>horse_loc</code> 保存的是原始 lambda，而不是后来定义的内层 mask。
+</div>
+<div class="output">2</div>
+
+<!-- ── remove ── -->
+<h3 class="sub" id="q-remove">Implementing remove()</h3>
+
+<pre><code class="language-python">def remove(n, digit):
+    """Return n with all occurrences of digit removed.
+    >>> remove(231, 3)   → 21
+    >>> remove(23123, 3) → 212
+    >>> remove(12345, 0) → 12345
+    >>> remove(0, 0)     → 0
+    """
+    kept, digits = 0, 0
+    while n > 0:
+        n, last = n // 10, n % 10
+        if last != digit:
+            kept = last * (10 ** digits) + kept
+            digits += 1
+    return kept
+</code></pre>
+
+<div class="tip">
+  逐位从低位到高位扫描，保留不等于 <code>digit</code> 的位，按位权重重新拼装数字。<br>
+  <code>digits</code> 记录已保留的位数，用于计算每一位的位值（<code>10 ** digits</code>）。
+</div>
+
+<!-- ── Decorators ── -->
+<h3 class="sub" id="decorators">Decorators — 装饰器</h3>
+
+<pre><code class="language-python">def trace1(fn):
+    """Return a traced version of fn (single-argument)."""
+    def traced(x):
+        print('Calling', fn.__name__, 'on argument', x)
+        return fn(x)
+    return traced
+
+# 使用 @ 语法糖（等价于 square = trace1(square)）
+@trace1
+def square(x):
+    return x * x
+
+@trace1
+def sum_squares_up_to(n):
+    k, total = 1, 0
+    while k <= n:
+        total += square(k)
+        k += 1
+    return total
+
+print(sum_squares_up_to(3))
+</code></pre>
+
+<div class="output">
+Calling sum_squares_up_to on argument 3<br>
+Calling square on argument 1<br>
+Calling square on argument 2<br>
+Calling square on argument 3<br>
+14
+</div>
+
+<div class="note">
+  <code>@trace1</code> 是语法糖，等价于在定义后立即执行 <code>square = trace1(square)</code>。<br>
+  装饰器本质上是一个<strong>高阶函数</strong>：接受函数，返回增强版函数。
+</div>
+
+<hr>
+
+<!-- ═══ Quick Reference Table ═══ -->
+<h2 class="section" id="ref"><span class="num">REF</span> Quick Reference 速查表</h2>
+
+<table>
+  <tr><th>概念</th><th>关键词 / 语法</th><th>核心要点</th></tr>
+  <tr><td>定义函数</td><td><code>def f(x): return ...</code></td><td>创建函数对象并绑定到当前帧</td></tr>
+  <tr><td>高阶函数</td><td>函数作参数 / 返回值</td><td><code>summation(n, term)</code></td></tr>
+  <tr><td>闭包</td><td>内层函数 + 外层帧</td><td><code>make_adder</code> 捕获 <code>n</code></td></tr>
+  <tr><td>Lambda</td><td><code>lambda x: expr</code></td><td>单表达式匿名函数，不能含语句</td></tr>
+  <tr><td>柯里化</td><td><code>f(x)(y)</code></td><td><code>lambda f: lambda x: lambda y: f(x,y)</code></td></tr>
+  <tr><td>装饰器</td><td><code>@decorator</code></td><td><code>fn = decorator(fn)</code> 的语法糖</td></tr>
+  <tr><td>短路求值</td><td><code>and</code> / <code>or</code></td><td>and：左假则短路；or：左真则短路</td></tr>
+  <tr><td>断言</td><td><code>assert expr, msg</code></td><td>expr 为假 → AssertionError</td></tr>
+  <tr><td>None</td><td>无 return / return 无值</td><td>交互器不显示，print 会打印</td></tr>
+  <tr><td>环境图父链接</td><td>定义时词法环境</td><td>≠ 调用时的环境</td></tr>
+</table>
+
+</main>
+</body>
+</html>
