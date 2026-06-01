@@ -64,7 +64,7 @@ Core Insight: Line 1 executes before Line 2's definition. Therefore, horse firml
 
 核心精髓：第一行在第二行定义前执行。因此 horse 牢牢锁定了原始 lambda 闭包，最终巧妙避开了后续的覆盖陷阱，求值结果为 2。
 
-🤝 Contribution & Academic Honesty / 贡献声明与学术诚信
+## 🤝 Contribution & Academic Honesty / 贡献声明与学术诚信
 Contribution: Issues and Pull Requests are highly welcome! Let's build the best CS61A companion guide together.
 
 Academic Honesty: This repository is for educational and self-study purposes only. If you are currently enrolled in UC Berkeley or any other university, please strictly adhere to your school's Academic Honesty guidelines. DO NOT copy code directly for project submissions.
