@@ -51,6 +51,7 @@ Most CS61A repositories are just messy code dumps or plain texts. This project i
 > ⚠️ **新帧的父链接 (Parent Link) 永远指向该函数「定义时」的环境，而非「调用时」的环境！**
 
 ### 2️⃣ The Infamous `horse()` Question Breakdown / 杀手题 `horse()` 视觉拆解
+
 ```python
 def horse(mask):
     horse = mask              # 1. Local 'horse' bound to external lambda / 局部 horse 绑定到传入的外部 lambda
@@ -66,5 +67,6 @@ Contribution: Issues and Pull Requests are highly welcome! Let's build the best 
 
 Academic Honesty: This repository is for educational and self-study purposes only. If you are currently enrolled in UC Berkeley or any other university, please strictly adhere to your school's Academic Honesty guidelines. DO NOT copy code directly for project submissions.
 
-❤️ If these visualized HTML notes saved you before the Midterm, please give this repository a Star 🌟! It drives me to update the remaining parts!
-❤️ 如果这些网页可视化笔记理清了你的思绪，或者救你于 Midterm 之前，请帮我点一个 Star 🌟，这是对我持续更新最大的鼓励！
+❤️ If these visualized HTML notes helped you, please give this repository a Star 🌟! It drives me to update the remaining parts!
+
+❤️ 如果这些网页可视化笔记理清了你的思绪，请帮我点一个 Star 🌟，这是对我持续更新最大的鼓励！
